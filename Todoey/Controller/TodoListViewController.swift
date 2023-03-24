@@ -27,7 +27,7 @@ class TodoListViewController: UITableViewController { // as a UITVCtrl already i
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         // end debug navigationBar background and title colors
         
-        todoListBrain.loadData()
+        todoListBrain.loadData(n: 100)
 
     }
     
@@ -41,23 +41,20 @@ class TodoListViewController: UITableViewController { // as a UITVCtrl already i
  
         // Configure content of the cell  (cell.textLabel = ... is going to be deprecated)
         var content = cell.defaultContentConfiguration()
-        content.text = todoListBrain.itemsArray[indexPath.row]
+        content.text = todoListBrain.itemsArray[indexPath.row].label
         content.imageProperties.tintColor = .purple
         cell.contentConfiguration = content
+        cell.accessoryType = todoListBrain.itemsArray[indexPath.row].checked ? .checkmark : .none
         
         return(cell)
     }
     
     // MARK methods as delegate of the tableView: check/unchek the item + only "flash" when selected
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let cell = tableView.cellForRow(at: indexPath) {
-            if (cell.accessoryType == .checkmark) {
-                cell.accessoryType = .none
-            } else {
-                cell.accessoryType = .checkmark
-            }
-        }
-        tableView.deselectRow(at: indexPath, animated: true)
+        todoListBrain.itemsArray[indexPath.row].checked = !todoListBrain.itemsArray[indexPath.row].checked
+        tableView.reloadRows(at: [indexPath], with: .automatic)
+        self.todoListBrain.saveData()
+        // tableView.deselectRow(at: indexPath, animated: true)
     }
     
     // MARK - Add Items
@@ -66,10 +63,11 @@ class TodoListViewController: UITableViewController { // as a UITVCtrl already i
         let action = UIAlertAction(title: "Add", style: .default) { alertAction in
             if let newItemLabel = alert.textFields?[0].text {
                 if newItemLabel != "" {
-                    let newItem = newItemLabel
+                    let newItem = TodoListItem(label: newItemLabel)
                     self.todoListBrain.itemsArray.append(newItem)
                     self.todoListBrain.saveData()
                     self.tableView.reloadData()
+                    self.tableView.scrollToRow(at: IndexPath(row: self.todoListBrain.itemsArray.count - 1, section: 0), at: .top, animated: true)
                 }
             }
         }

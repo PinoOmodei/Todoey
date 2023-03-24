@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5BB95B2F29CE218100E8075D /* TodoListBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB95B2E29CE218100E8075D /* TodoListBrain.swift */; };
+		5BB95B3229CE23B300E8075D /* TodoListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB95B3129CE23B300E8075D /* TodoListItem.swift */; };
 		5BEABF2F29CD0C750081D2FC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BEABF2E29CD0C750081D2FC /* AppDelegate.swift */; };
 		5BEABF3129CD0C750081D2FC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BEABF3029CD0C750081D2FC /* SceneDelegate.swift */; };
 		5BEABF3329CD0C750081D2FC /* TodoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BEABF3229CD0C750081D2FC /* TodoListViewController.swift */; };
@@ -20,6 +21,7 @@
 
 /* Begin PBXFileReference section */
 		5BB95B2E29CE218100E8075D /* TodoListBrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListBrain.swift; sourceTree = "<group>"; };
+		5BB95B3129CE23B300E8075D /* TodoListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListItem.swift; sourceTree = "<group>"; };
 		5BEABF2B29CD0C750081D2FC /* Todoey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Todoey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BEABF2E29CD0C750081D2FC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5BEABF3029CD0C750081D2FC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -63,6 +65,7 @@
 			isa = PBXGroup;
 			children = (
 				5BB95B2E29CE218100E8075D /* TodoListBrain.swift */,
+				5BB95B3129CE23B300E8075D /* TodoListItem.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -175,6 +178,7 @@
 				5BEABF3329CD0C750081D2FC /* TodoListViewController.swift in Sources */,
 				5BB95B2F29CE218100E8075D /* TodoListBrain.swift in Sources */,
 				5BEABF2F29CD0C750081D2FC /* AppDelegate.swift in Sources */,
+				5BB95B3229CE23B300E8075D /* TodoListItem.swift in Sources */,
 				5BEABF3129CD0C750081D2FC /* SceneDelegate.swift in Sources */,
 				5BEABF3929CD0C750081D2FC /* Todoey.xcdatamodeld in Sources */,
 			);

@@ -8,19 +8,20 @@
 import Foundation
 
 struct TodolistBrain {
-    var itemsArray: [String] = []
+    var itemsArray: [TodoListItem] = []
     
-    mutating func loadData () {
+    mutating func loadData (n: Int) {
         // load the data from UserDefaults.standard
         // UserDefaults.standard.removeObject(forKey: K.udItemsArray)
-        if let items = UserDefaults.standard.array(forKey: K.udItemsArray) as? [String] {
-            itemsArray = items
+        let samples = ["Mangiare carne", "Bere vino", "Studiare Swift", "Salutare la famiglia", "Guadagnare di più", "Sistemare i bagni", "Pagare il conto", "Finire la scuola", "Andare in USA", "Preparare ESTA"]
+        
+        for _ in 1...n {
+            itemsArray.append(TodoListItem(label: samples[Int.random(in: 0...9)]))
         }
-
     }
     
     func saveData() {
-        UserDefaults.standard.set(itemsArray, forKey: K.udItemsArray)
+        print("saveData is disabled")
     }
     
 }
