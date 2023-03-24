@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5BB95B2F29CE218100E8075D /* TodoListBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB95B2E29CE218100E8075D /* TodoListBrain.swift */; };
 		5BEABF2F29CD0C750081D2FC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BEABF2E29CD0C750081D2FC /* AppDelegate.swift */; };
 		5BEABF3129CD0C750081D2FC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BEABF3029CD0C750081D2FC /* SceneDelegate.swift */; };
 		5BEABF3329CD0C750081D2FC /* TodoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BEABF3229CD0C750081D2FC /* TodoListViewController.swift */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5BB95B2E29CE218100E8075D /* TodoListBrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListBrain.swift; sourceTree = "<group>"; };
 		5BEABF2B29CD0C750081D2FC /* Todoey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Todoey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BEABF2E29CD0C750081D2FC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5BEABF3029CD0C750081D2FC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -57,6 +59,14 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		5BB95B3029CE218600E8075D /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				5BB95B2E29CE218100E8075D /* TodoListBrain.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		5BEABF2229CD0C750081D2FC = {
 			isa = PBXGroup;
 			children = (
@@ -78,6 +88,7 @@
 			children = (
 				5BEABF2E29CD0C750081D2FC /* AppDelegate.swift */,
 				5BEABF3029CD0C750081D2FC /* SceneDelegate.swift */,
+				5BB95B3029CE218600E8075D /* Model */,
 				5BB95B2D29CE1D2300E8075D /* View */,
 				5BB95B2C29CE1D1500E8075D /* Controller */,
 				5BEABF3A29CD0C760081D2FC /* Assets.xcassets */,
@@ -162,6 +173,7 @@
 			files = (
 				5BEABF4629CD19DE0081D2FC /* Constants.swift in Sources */,
 				5BEABF3329CD0C750081D2FC /* TodoListViewController.swift in Sources */,
+				5BB95B2F29CE218100E8075D /* TodoListBrain.swift in Sources */,
 				5BEABF2F29CD0C750081D2FC /* AppDelegate.swift in Sources */,
 				5BEABF3129CD0C750081D2FC /* SceneDelegate.swift in Sources */,
 				5BEABF3929CD0C750081D2FC /* Todoey.xcdatamodeld in Sources */,

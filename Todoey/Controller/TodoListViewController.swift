@@ -9,7 +9,7 @@ import UIKit
 
 class TodoListViewController: UITableViewController { // as a UITVCtrl already inherit datasource and delegate protocols and outlets
     
-    var itemsArray: [String] = []
+    var todoListBrain = TodolistBrain()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,17 +27,13 @@ class TodoListViewController: UITableViewController { // as a UITVCtrl already i
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         // end debug navigationBar background and title colors
         
-        // load the data from UserDefaults.standard
-        // UserDefaults.standard.removeObject(forKey: K.udItemsArray)
-        if let items = UserDefaults.standard.array(forKey: K.udItemsArray) as? [String] {
-            itemsArray = items
-        }
+        todoListBrain.loadData()
 
     }
     
     // MARK methods as datasource of the tableView
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return itemsArray.count
+        return todoListBrain.itemsArray.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -45,7 +41,7 @@ class TodoListViewController: UITableViewController { // as a UITVCtrl already i
  
         // Configure content of the cell  (cell.textLabel = ... is going to be deprecated)
         var content = cell.defaultContentConfiguration()
-        content.text = itemsArray[indexPath.row]
+        content.text = todoListBrain.itemsArray[indexPath.row]
         content.imageProperties.tintColor = .purple
         cell.contentConfiguration = content
         
@@ -60,7 +56,6 @@ class TodoListViewController: UITableViewController { // as a UITVCtrl already i
             } else {
                 cell.accessoryType = .checkmark
             }
-            UserDefaults.standard.set(itemsArray, forKey: K.udItemsArray)
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -72,9 +67,9 @@ class TodoListViewController: UITableViewController { // as a UITVCtrl already i
             if let newItemLabel = alert.textFields?[0].text {
                 if newItemLabel != "" {
                     let newItem = newItemLabel
-                    self.itemsArray.append(newItem)
+                    self.todoListBrain.itemsArray.append(newItem)
+                    self.todoListBrain.saveData()
                     self.tableView.reloadData()
-                    UserDefaults.standard.set(self.itemsArray, forKey: K.udItemsArray)
                 }
             }
         }
