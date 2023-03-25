@@ -27,7 +27,7 @@ class TodoListViewController: UITableViewController { // as a UITVCtrl already i
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         // end debug navigationBar background and title colors
         
-        todoListBrain.loadData(n: 100)
+        todoListBrain.loadData()
 
     }
     

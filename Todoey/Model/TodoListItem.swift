@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TodoListItem {
+struct TodoListItem : Codable {
     let label: String
     var checked: Bool = false
 }
