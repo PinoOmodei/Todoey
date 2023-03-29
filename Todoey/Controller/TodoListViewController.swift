@@ -6,11 +6,13 @@
 //
 
 import UIKit
+import CoreData
 
 class TodoListViewController: UITableViewController { // as a UITVCtrl already inherit datasource and delegate protocols and outlets
     
-    var todoListBrain = TodolistBrain()
-
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext   // it's exactly as a DBMS session
+    var itemsArray: [TodoListItem] = []   // After a LONG and DEEP reasoning it is CORRECT to have the array in the controller, not in the model
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -27,13 +29,13 @@ class TodoListViewController: UITableViewController { // as a UITVCtrl already i
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         // end debug navigationBar background and title colors
         
-        todoListBrain.loadData()
-
+        // load the array from the (data)model
+        loadData()
     }
     
-    // MARK methods as datasource of the tableView
+    // MARK: - methods as datasource of the tableView - the datasource IS the array
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return todoListBrain.itemsArray.count
+        return itemsArray.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -41,33 +43,53 @@ class TodoListViewController: UITableViewController { // as a UITVCtrl already i
  
         // Configure content of the cell  (cell.textLabel = ... is going to be deprecated)
         var content = cell.defaultContentConfiguration()
-        content.text = todoListBrain.itemsArray[indexPath.row].label
+        content.text = itemsArray[indexPath.row].label
         content.imageProperties.tintColor = .purple
         cell.contentConfiguration = content
-        cell.accessoryType = todoListBrain.itemsArray[indexPath.row].checked ? .checkmark : .none
+        cell.accessoryType = itemsArray[indexPath.row].checked ? .checkmark : .none
         
         return(cell)
     }
     
-    // MARK methods as delegate of the tableView: check/unchek the item + only "flash" when selected
+    // MARK: - methods as delegate of the tableView: check/unchek the item + only "flash" when selected
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        todoListBrain.itemsArray[indexPath.row].checked = !todoListBrain.itemsArray[indexPath.row].checked
+        itemsArray[indexPath.row].checked = !itemsArray[indexPath.row].checked  // this is an UPDATE in the context
+        saveData()
         tableView.reloadRows(at: [indexPath], with: .automatic)
-        self.todoListBrain.saveData()
         // tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    // MARK - Add Items
+    override func tableView(_ tableView: UITableView,
+                            leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        // Delete action
+        let deleteAction = UIContextualAction(style: .destructive,
+                                       title: "Delete") { [weak self] (action, view, completionHandler) in
+            if let self = self {
+                self.context.delete(self.itemsArray[indexPath.row])
+                self.saveData()
+                self.itemsArray.remove(at: indexPath.row)
+                self.tableView.reloadData()
+            }
+            completionHandler(true)
+        }
+        let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
+        
+        return configuration
+    }
+    
+    // MARK: - Adding an Item
     @IBAction func onAddItem(_ sender: UIBarButtonItem) {
         let alert = UIAlertController(title: "Add Item in Todoey", message: "", preferredStyle: .alert)
         let action = UIAlertAction(title: "Add", style: .default) { alertAction in
             if let newItemLabel = alert.textFields?[0].text {
                 if newItemLabel != "" {
-                    let newItem = TodoListItem(label: newItemLabel)
-                    self.todoListBrain.itemsArray.append(newItem)
-                    self.todoListBrain.saveData()
+                    let newItem = TodoListItem(context: self.context)  // insert new item in the Todoey.TodoListItem Entity
+                    newItem.label = newItemLabel
+                    newItem.checked = false
+                    self.saveData()
+                    self.itemsArray.append(newItem)
                     self.tableView.reloadData()
-                    self.tableView.scrollToRow(at: IndexPath(row: self.todoListBrain.itemsArray.count - 1, section: 0), at: .top, animated: true)
+                    self.tableView.scrollToRow(at: IndexPath(row: self.itemsArray.count - 1, section: 0), at: .top, animated: true)
                 }
             }
         }
@@ -77,5 +99,24 @@ class TodoListViewController: UITableViewController { // as a UITVCtrl already i
         alert.addAction(action)
         present(alert, animated: true)
     }
+    
+    // MARK: - Persistence management (save, load)
+    func loadData() {
+        let request : NSFetchRequest<TodoListItem> = TodoListItem.fetchRequest()
+        do {
+            itemsArray = try context.fetch(request)  // select * into itemsArray from Todoey.TodoListItems
+        } catch {
+            print("Error fetching items: \(error)")
+        }
+    }
+    
+    func saveData() {
+        do {
+            try context.save()
+        } catch {
+            print("Error saving context: \(error)")
+        }
+    }
+   
     
 }
