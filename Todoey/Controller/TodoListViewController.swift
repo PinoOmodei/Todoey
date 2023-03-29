@@ -101,8 +101,7 @@ class TodoListViewController: UITableViewController { // as a UITVCtrl already i
     }
     
     // MARK: - Persistence management (save, load)
-    func loadData() {
-        let request : NSFetchRequest<TodoListItem> = TodoListItem.fetchRequest()
+    func loadData(with request: NSFetchRequest<TodoListItem> = TodoListItem.fetchRequest()) {
         do {
             itemsArray = try context.fetch(request)  // select * into itemsArray from Todoey.TodoListItems
         } catch {
@@ -118,5 +117,31 @@ class TodoListViewController: UITableViewController { // as a UITVCtrl already i
         }
     }
    
+    
+}
+
+// MARK: - UISearchBarDelegate
+extension TodoListViewController: UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        let request: NSFetchRequest<TodoListItem> = TodoListItem.fetchRequest()
+        request.predicate = NSPredicate(format: "label CONTAINS[cd] %@", searchBar.text!)
+        request.sortDescriptors = [NSSortDescriptor(key: "label", ascending: true)]
+        
+        loadData(with: request)
+        tableView.reloadData()
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text?.count == 0 {
+
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }
+            loadData()
+            tableView.reloadData()
+        }
+    }
+    
     
 }
