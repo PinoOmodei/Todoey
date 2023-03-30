@@ -12,24 +12,29 @@ class TodoListViewController: UITableViewController { // as a UITVCtrl already i
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext   // it's exactly as a DBMS session
     var itemsArray: [TodoListItem] = []   // After a LONG and DEEP reasoning it is CORRECT to have the array in the controller, not in the model
+    var selectedCategory: Category?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Debug NavigationBar background and title colors: https://stackoverflow.com/questions/70834421
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = UIColor.systemBlue
-                
+        
         // This will alter the navigation bar title appearance
         let titleAttribute = [NSAttributedString.Key.font:  UIFont.systemFont(ofSize: 25, weight: .bold), NSAttributedString.Key.foregroundColor: UIColor.white] //alter to fit your needs
         appearance.titleTextAttributes = titleAttribute
-
+        
+        // PINO WAS HERE: white buttons please!
+        navigationController?.navigationBar.tintColor = UIColor.white;
+   
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         // end debug navigationBar background and title colors
         
         // load the array from the (data)model
+        self.title = selectedCategory?.name ?? "(none)"        
         loadData()
     }
     
@@ -86,6 +91,7 @@ class TodoListViewController: UITableViewController { // as a UITVCtrl already i
                     let newItem = TodoListItem(context: self.context)  // insert new item in the Todoey.TodoListItem Entity
                     newItem.label = newItemLabel
                     newItem.checked = false
+                    newItem.category = self.selectedCategory
                     self.saveData()
                     self.itemsArray.append(newItem)
                     self.tableView.reloadData()
@@ -101,9 +107,19 @@ class TodoListViewController: UITableViewController { // as a UITVCtrl already i
     }
     
     // MARK: - Persistence management (save, load)
-    func loadData(with request: NSFetchRequest<TodoListItem> = TodoListItem.fetchRequest()) {
+    //    func loadData(with request: NSFetchRequest<TodoListItem> = TodoListItem.fetchRequest()) {
+    func loadData(with otherPredicate: NSPredicate? = nil) {
+        let request: NSFetchRequest<TodoListItem> = TodoListItem.fetchRequest()
+        
+        let categoryPredicate = NSPredicate(format: "category = %@", selectedCategory!)
+        if otherPredicate != nil {
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, otherPredicate!])
+        } else {
+            request.predicate = categoryPredicate
+        }
+
         do {
-            itemsArray = try context.fetch(request)  // select * into itemsArray from Todoey.TodoListItems
+            itemsArray = try context.fetch(request)  // select * into itemsArray from Todoey.TodoListItems ...
         } catch {
             print("Error fetching items: \(error)")
         }
@@ -124,11 +140,11 @@ class TodoListViewController: UITableViewController { // as a UITVCtrl already i
 extension TodoListViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        let request: NSFetchRequest<TodoListItem> = TodoListItem.fetchRequest()
-        request.predicate = NSPredicate(format: "label CONTAINS[cd] %@", searchBar.text!)
-        request.sortDescriptors = [NSSortDescriptor(key: "label", ascending: true)]
         
-        loadData(with: request)
+        let predicate = NSPredicate(format: "label CONTAINS[cd] %@", searchBar.text!)
+//        request.sortDescriptors = [NSSortDescriptor(key: "label", ascending: true)]
+        
+        loadData(with: predicate)
         tableView.reloadData()
     }
     

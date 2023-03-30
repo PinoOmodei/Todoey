@@ -9,6 +9,7 @@ import Foundation
 
 struct K {
     static let listItemCellIdentifier = "ToDoItemCell"
-    static let udItemsArray = "TodoArray"
+    static let listCategoryCellIdentifier = "CategoryCell"
+    static let segue = "toItems"
     static let plistFilename = "itemsArray.plist"
 }
